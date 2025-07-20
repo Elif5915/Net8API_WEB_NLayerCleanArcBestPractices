@@ -1,4 +1,4 @@
-﻿namespace App_Repositories;
+﻿namespace App_Repositories.Product;
 public class Product
 {
     public int Id { get; set; }

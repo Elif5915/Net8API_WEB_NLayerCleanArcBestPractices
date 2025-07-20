@@ -17,7 +17,10 @@ public static class RepositoryExtensions
             #endregion
 
             var connectionString = configuration.GetSection(ConnectionStringOption.Key).Get<ConnectionStringOption>();
-            options.UseSqlServer(connectionString!.SqlServer);
+            options.UseSqlServer(connectionString!.SqlServer, sqlServerOptionsAction =>
+            {
+                sqlServerOptionsAction.MigrationsAssembly(typeof(RepositoryAssembly).Assembly.FullName); //mig dosyalarım repository katmanımda olmalı olsun diye bu ayar yazıldı
+            });
         });
 
         return services;
