@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using App_Repositories.Generic;
+using App_Repositories.Product;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +24,15 @@ public static class RepositoryExtensions
                 sqlServerOptionsAction.MigrationsAssembly(typeof(RepositoryAssembly).Assembly.FullName); //mig dosyalarım repository katmanımda olmalı olsun diye bu ayar yazıldı
             });
         });
+
+        services.AddScoped<IProductRepository, ProductRepository>();//IProductRepository gördüğün zaman ProductRepository nesne örneği üret
+        //yaşam döngüsü AddScoped; request response döndüğü anda ProductRepository nesnesinde dispose olması
+        //lazım çünkü ProductRepository bu nesnelerde dbcontextler var, dbcontextlerin yaşam döngüsü scopdur.
+        //request geldiğinde bir nesne örneği oluşur response döndüğü zaman da dbcontextlerde dispose olur.
+        //dispose = elden çıkarmak
+        //bu yüzden AddScoped<IProductRepository, ProductRepository> bunlar AddSingleton olmaz ya da AddTransient olmaz AMA EF CORE İÇİN GEÇERLİ!
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }
