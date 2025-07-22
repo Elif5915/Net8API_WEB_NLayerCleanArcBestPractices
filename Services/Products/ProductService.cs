@@ -9,26 +9,36 @@ public class ProductService(IProductRepository productRepository) : IProductServ
     {
         var products = (await productRepository.GetTopPriceProductsAsync(count));
 
-        var productsDto = products.Select(p => new ProductDto
-        {
-            Id = p.Id,
-            Name = p.Name,
-            Price = p.Price * 1.2m, 
+        var productDto = products.Select(p => new ProductDto(p.Id, p.Name, p.Price, p.Stock)).ToList();
 
-        }).ToList(); //manuel mapping en hızlısı amna biz automapper kullanarakdaha sonra yapacağız
+        return new ServiceResult<List<ProductDto>> { Data = productDto };
 
 
-        return new ServiceResult<List<ProductDto>>()
-        {
-            Data = productsDto
-        };
+        #region manuel mapleme ile
+        //var productsDto = products.Select(p => new ProductDto
+        //{
+        //    Id = p.Id,
+        //    Name = p.Name,
+        //    Price = p.Price * 1.2m, 
+
+        //}).ToList(); //manuel mapping en hızlısı amna biz automapper kullanarakdaha sonra yapacağız
+
+
+        //return new ServiceResult<List<ProductDto>>()
+        //{
+        //    Data = productsDto
+        //};
+
+        #endregion
+        //yaptılan manuel map en hızlı çalışır, kullandığınız tğm mapper kütüphanelerinden daha hızlı çalışır.
+
         //return new ServiceResult<List<Product>>()
         //{
         //    Data = products
 
         //};
     }
-    public async Task<ServiceResult<Product>> GetProductByIdAsync(int id)
+    public async Task<ServiceResult<ProductDto>> GetProductByIdAsync(int id)
     {
         var product = await productRepository.GetByIdAsync(id);
         if(product is null)
@@ -37,13 +47,15 @@ public class ProductService(IProductRepository productRepository) : IProductServ
             //{
             //    ErrorMessage = new List<string>() { "Product not found" }
             //};
-            ServiceResult<Product>.Fail(errorMessage: "Product not found", HttpStatusCode.NotFound);
+            ServiceResult<ProductDto>.Fail(errorMessage: "Product not found", HttpStatusCode.NotFound);
         }
         //return new ServiceResult<Product>()
         //{
         //    Data = product
         //};
-        return ServiceResult<Product>.Success(product!);
+
+        var productsAsDto = new ProductDto(product!.Id,product.Name,product.Price,product.Stock);
+        return ServiceResult<ProductDto>.Success(productsAsDto!);
     }
 
 }
