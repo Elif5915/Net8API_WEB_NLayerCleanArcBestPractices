@@ -1,7 +1,7 @@
 ﻿using System.Net;
 
 namespace App_Services;
-public class ServiceResult<T> //result poattern implemantasyonudur.
+public class ServiceResult<T> //result pattern implemantasyonudur.
 {
     public T? Data { get; set; } //başarılı olduğunda data dolacak
 
@@ -34,6 +34,43 @@ public class ServiceResult<T> //result poattern implemantasyonudur.
     public static ServiceResult<T> Fail (string errorMessage, HttpStatusCode code = HttpStatusCode.BadRequest)
     {
         return new ServiceResult<T>()
+        {
+            ErrorMessage = [errorMessage],
+            StatusCode = code
+        };
+    }
+}
+
+public class ServiceResult
+{
+    public List<string>? ErrorMessage { get; set; } 
+
+    public bool IsSuccess => ErrorMessage == null || ErrorMessage.Count == 0; 
+
+    public bool IsFail => !IsSuccess;
+
+    public HttpStatusCode StatusCode { get; set; }
+
+    
+    public static ServiceResult Success(HttpStatusCode code = HttpStatusCode.OK)
+    {
+        return new ServiceResult()
+        {
+            StatusCode = code
+        };
+    }
+    public static ServiceResult Fail(List<string> errorMessage, HttpStatusCode code = HttpStatusCode.BadRequest)
+    {
+        return new ServiceResult()
+        {
+            ErrorMessage = errorMessage,
+            StatusCode = code
+        };
+    }
+
+    public static ServiceResult Fail(string errorMessage, HttpStatusCode code = HttpStatusCode.BadRequest)
+    {
+        return new ServiceResult()
         {
             ErrorMessage = [errorMessage],
             StatusCode = code
