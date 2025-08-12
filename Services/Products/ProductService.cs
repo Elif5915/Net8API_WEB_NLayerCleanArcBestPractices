@@ -2,6 +2,7 @@
 using App_Repositories.Product;
 using App_Services.Products.Dto;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Net;
 
 namespace App_Services.Products;
@@ -50,6 +51,27 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
         return ServiceResult<List<ProductDto>>.Success(productDto);
     }
 
+    public async Task<ServiceResult<List<ProductDto>>> GetPagedAllListAsync(int pageNumber,int pageSize)
+    {
+        // 1(pagenumber) - 10(pagesize) gelirse ilk 10 kayıt demiş oluruz. Bunu yazmak için Skip metodundan faydalanacağız.
+        // skip(0).take(10) skip ile sıfırı atla, take ile ilk 10 kaydı al
+        //eğerki ikinci sf 10 kayıt ver derse 2 - 10 => 11-20 kayıt arası olmalı => skip(10).take(10) on atla on taneyi ver.
+
+        // 1- 10 => ilk 10 kayıt  skip(0).Take(10)
+        // 2- 10 => 11 - 20 kayıt  skip(10).Take(10)
+        // 3- 10 => 21 - 30 kayıt  skip(20).Take(10) biz bunu yapmamız gerek.
+
+        var products = await productRepository.GetAll().Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+        var productDto = products.Select(p => new ProductDto
+        (
+            p.Id,p.Name,p.Price,p.Stock
+
+        )).ToList();
+
+        return ServiceResult<List<ProductDto>>.Success(productDto);
+
+    }
+
     public async Task<ServiceResult<ProductDto?>> GetProductByIdAsync(int id)
     {
         var product = await productRepository.GetByIdAsync(id);
@@ -81,7 +103,7 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
         await productRepository.AddAsync(product);
         await unitOfWork.SaveChangesAsync();
 
-        return ServiceResult<CreateProductResponse>.Success(new CreateProductResponse(product.Id));
+        return ServiceResult<CreateProductResponse>.SuccessAsCreated(new CreateProductResponse(product.Id),$"api/products/{product.Id}");
 
     }
 
@@ -106,7 +128,7 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
         productRepository.Update(product);
         await unitOfWork.SaveChangesAsync();
 
-        return ServiceResult.Success();
+        return ServiceResult.Success(HttpStatusCode.NoContent);
     }
 
     public async Task<ServiceResult> DeleteAsync(int id)
@@ -121,7 +143,7 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
         productRepository.Delete(product);
         await unitOfWork.SaveChangesAsync();
 
-        return ServiceResult.Success();
+        return ServiceResult.Success(HttpStatusCode.NoContent);
     }
 }
 // Save changes her zaman servis katamında yapılır, repository katmanında yapılmaz.transaction servis katmanından yönetilir.

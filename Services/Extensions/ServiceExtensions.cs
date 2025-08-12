@@ -1,4 +1,4 @@
-﻿using App_Services.Product;
+﻿using App_Services.Products;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

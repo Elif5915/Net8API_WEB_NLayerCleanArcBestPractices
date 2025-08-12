@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text.Json.Serialization;
 
 namespace App_Services;
 public class ServiceResult<T> //result pattern implemantasyonudur.
@@ -7,11 +8,17 @@ public class ServiceResult<T> //result pattern implemantasyonudur.
 
     public List<string>? ErrorMessage { get; set; } //başarısız/hata olunca hata  mesajı dolacak
 
+    [JsonIgnore]
     public bool IsSuccess =>  ErrorMessage == null || ErrorMessage.Count == 0; //sadece geti olan property oldu
 
+    [JsonIgnore]
     public bool IsFail => !IsSuccess;
 
+    [JsonIgnore]
     public HttpStatusCode StatusCode { get; set; }
+
+    [JsonIgnore]
+    public string? UrlAsCreated { get; set; }
 
     //aşağıdakilere ne denir static factory method olarak adlandırılır, aşağıdaki methodlarla new lemeyi kontrol altına aldık.
     public static ServiceResult<T> Success(T data, HttpStatusCode code = HttpStatusCode.OK)
@@ -22,6 +29,17 @@ public class ServiceResult<T> //result pattern implemantasyonudur.
             StatusCode = code
         };
     }
+
+    public static ServiceResult<T> SuccessAsCreated(T data, string urlAsCreated)
+    {
+        return new ServiceResult<T>()
+        {
+            Data = data,
+            StatusCode = HttpStatusCode.Created,
+            UrlAsCreated = urlAsCreated
+        };
+    }
+
     public static ServiceResult<T> Fail(List<string> errorMessage, HttpStatusCode code = HttpStatusCode.BadRequest)
     {
         return new ServiceResult<T>()
@@ -43,12 +61,15 @@ public class ServiceResult<T> //result pattern implemantasyonudur.
 
 public class ServiceResult
 {
-    public List<string>? ErrorMessage { get; set; } 
+    public List<string>? ErrorMessage { get; set; }
 
-    public bool IsSuccess => ErrorMessage == null || ErrorMessage.Count == 0; 
+    [JsonIgnore] // bu atribute ile serialiaze etmemesini sağlıyoruz
+    public bool IsSuccess => ErrorMessage == null || ErrorMessage.Count == 0;
 
+    [JsonIgnore]
     public bool IsFail => !IsSuccess;
 
+    [JsonIgnore]
     public HttpStatusCode StatusCode { get; set; }
 
     

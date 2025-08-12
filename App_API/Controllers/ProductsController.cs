@@ -25,7 +25,20 @@ public class ProductsController(IProductService productService) : CustomBaseCont
     //2.yol yazımı yukarıdakinden daha sadece tek satırlık
     //public async Task<IActionResult> GetAll() => CreateActionResult(await productService.GetAllListAsync());
 
-    [HttpGet]
+    [HttpGet("{pageNumber}/{pageSize}")]
+    public async Task<IActionResult> GetPagedAll(int pageNumber, int pageSize)
+    {
+        var serviceResult = await productService.GetPagedAllListAsync(pageNumber,pageSize);
+
+        return CreateActionResult(serviceResult);
+    }
+
+    /// <summary>
+    /// http://localhost:5000/api/products?id=2 dersek aşağıdaki metod çalışır,datayı query stringde bekler
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var productResult = await productService.GetProductByIdAsync(id);
@@ -44,10 +57,10 @@ public class ProductsController(IProductService productService) : CustomBaseCont
     [HttpPost]
     public async Task<IActionResult> Create(CreateProductRequest request) => CreateActionResult(await productService.CreateAsync(request));
 
-    [HttpPut]
+    [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, UpdateProductRequest request) => CreateActionResult(await productService.UpdateAsync(id, request));
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id) => CreateActionResult(await productService.DeleteAsync(id));
 
 }
