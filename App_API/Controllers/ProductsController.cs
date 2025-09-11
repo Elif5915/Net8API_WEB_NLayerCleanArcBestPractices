@@ -25,7 +25,7 @@ public class ProductsController(IProductService productService) : CustomBaseCont
     //2.yol yazımı yukarıdakinden daha sadece tek satırlık
     //public async Task<IActionResult> GetAll() => CreateActionResult(await productService.GetAllListAsync());
 
-    [HttpGet("{pageNumber}/{pageSize}")]
+    [HttpGet("{pageNumber:int}/{pageSize:int}")] //rout constraint ler ile rout datalara  ne bekliyorsam onu belirtiyoruz
     public async Task<IActionResult> GetPagedAll(int pageNumber, int pageSize)
     {
         var serviceResult = await productService.GetPagedAllListAsync(pageNumber,pageSize);
@@ -38,7 +38,7 @@ public class ProductsController(IProductService productService) : CustomBaseCont
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
         var productResult = await productService.GetProductByIdAsync(id);
@@ -57,10 +57,22 @@ public class ProductsController(IProductService productService) : CustomBaseCont
     [HttpPost]
     public async Task<IActionResult> Create(CreateProductRequest request) => CreateActionResult(await productService.CreateAsync(request));
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, UpdateProductRequest request) => CreateActionResult(await productService.UpdateAsync(id, request));
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id) => CreateActionResult(await productService.DeleteAsync(id));
 
+    //[HttpPatch("/stock")] swaggerde neyi güncellediimiz daha net oslun diye buradan özelleştirme yapabiliriz isimlendirme 
+    [HttpPatch("stock")] // api/Products/stock şeklinde görülür swagger da 
+    public async Task<IActionResult> UpdateStock(UpdateProductStockRequest request) => CreateActionResult(await productService.UpdateStockAsync(request));
+
+    //[HttpPut("updateStock")]
+    //public async Task<IActionResult> UpdateStock(UpdateProductStockRequest request) => CreateActionResult(await productService.UpdateStockAsync(request));
+
 }
+//rout constraint ler ile isteklerimizde datat ne bekliyorsa onunla kısıtlıyoruz ve 404 not found dönmesini sağlıyoruz. 
+//best practies olarak bu daha uygun eğer sen constraint uygulamazsan ama int bekleyen bir endpointe string deper yazıp
+//gönderirsen postmande 400 bad request döner ama 404 dönmesi gerek. Swaggerda beklenen paramtre dışında başka bir şey 
+//gönderilmiyor onun default kontrol kuralı var. ama postmande o kural yok ondan sen api lerinde endpointlerinin ne beklediğini
+//belirterek 400 den 404 hatasına çevirebilirsin response.

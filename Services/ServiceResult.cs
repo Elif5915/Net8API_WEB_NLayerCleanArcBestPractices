@@ -29,7 +29,6 @@ public class ServiceResult<T> //result pattern implemantasyonudur.
             StatusCode = code
         };
     }
-
     public static ServiceResult<T> SuccessAsCreated(T data, string urlAsCreated)
     {
         return new ServiceResult<T>()

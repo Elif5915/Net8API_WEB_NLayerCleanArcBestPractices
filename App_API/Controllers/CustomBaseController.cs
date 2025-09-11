@@ -10,7 +10,6 @@ public class CustomBaseController : ControllerBase
     [NonAction] // bu atribute ile bunların bir endpoint olmadığı söylüyoruz compiler. Bunlar yardımcı metodlarımız
     public IActionResult CreateActionResult<T>(ServiceResult<T> result)
     {
-
         if (result.StatusCode == System.Net.HttpStatusCode.NoContent)
         {
             return NoContent();
@@ -42,5 +41,10 @@ public class CustomBaseController : ControllerBase
         }
 
         return new ObjectResult(result) { StatusCode = result.StatusCode.GetHashCode() };
+        //switch yapıısnda yazmak istersek aşağıdaki yapı gibi olur;
+        //return result.StatusCode switch {
+        //    System.Net.HttpStatusCode.NoContent => new ObjectResult(null) { StatusCode = result.StatusCode.GetHashCode()},
+        //    _ => new ObjectResult(result) { StatusCode = result.StatusCode.GetHashCode()}
+        //   };
     }
 }
