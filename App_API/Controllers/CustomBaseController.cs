@@ -19,7 +19,7 @@ public class CustomBaseController : ControllerBase
         if (result.StatusCode == System.Net.HttpStatusCode.Created)
         {
             //return new ObjectResult(null) { StatusCode = result.StatusCode.GetHashCode()};
-            return Created(result.UrlAsCreated, result.Data);
+            return Created(result.UrlAsCreated, result);
         }
 
         return new ObjectResult(result) { StatusCode = result.StatusCode.GetHashCode()};
