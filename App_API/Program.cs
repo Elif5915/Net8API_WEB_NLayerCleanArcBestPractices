@@ -1,11 +1,12 @@
 using App_Repositories.Extensions;
+using App_Services;
 using App_Services.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.Filters.Add<FluentValidationFilter>()); 
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true); //bu .net in default olarak üretmiþ olduðu hata mesajlarýný kapattýk.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
