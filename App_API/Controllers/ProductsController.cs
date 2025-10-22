@@ -71,7 +71,7 @@ public class ProductsController(IProductService productService) : CustomBaseCont
     //public async Task<IActionResult> UpdateStock(UpdateProductStockRequest request) => CreateActionResult(await productService.UpdateStockAsync(request));
 
 }
-//rout constraint ler ile isteklerimizde datat ne bekliyorsa onunla kısıtlıyoruz ve 404 not found dönmesini sağlıyoruz. 
+//route constraint ler ile isteklerimizde data ne bekliyorsa onunla kısıtlıyoruz ve 404 not found dönmesini sağlıyoruz. 
 //best practies olarak bu daha uygun eğer sen constraint uygulamazsan ama int bekleyen bir endpointe string deper yazıp
 //gönderirsen postmande 400 bad request döner ama 404 dönmesi gerek. Swaggerda beklenen paramtre dışında başka bir şey 
 //gönderilmiyor onun default kontrol kuralı var. ama postmande o kural yok ondan sen api lerinde endpointlerinin ne beklediğini
