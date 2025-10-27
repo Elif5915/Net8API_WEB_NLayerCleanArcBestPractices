@@ -1,12 +1,15 @@
 ﻿using App_Repositories;
 using App_Repositories.Product;
 using App_Services.Products.Dto;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Runtime.Intrinsics.X86;
 
 namespace App_Services.Products;
-public class ProductService(IProductRepository productRepository,IUnitOfWork unitOfWork) : IProductService
+public class ProductService(IProductRepository productRepository,IUnitOfWork unitOfWork, IValidator<CreateProductRequest> createProductRequestValidator) : IProductService
 {
     public async Task<ServiceResult<List<ProductDto>>> GetTopPriceProductsAsync(int count)
     {
@@ -94,6 +97,27 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
 
     public async Task<ServiceResult<CreateProductResponse>> CreateAsync(CreateProductRequest request)
     {
+        #region 2.YONTEM ASENKRON Busniess logicte VALİDASYON
+
+        ////2.YONTEM 
+        //var anyProduct = await productRepository.Where(x => x.Name == request.Name).AnyAsync(); // async şekilde db gidip var mı diye baktık kontrol ettik, var olan thread leri bloklamadık.
+        //// AnyAsync();  bu şkilde db gidip cevap almamız 10 dk sürebilir, biz await ile async kod yazdığımzı için threadimi bloklanmıyor. başka işler yapabiliyor.
+        //if (anyProduct)
+        //{
+        //    return ServiceResult<CreateProductResponse>.Fail("Ürün ismi veritabanında/sistemde bulunmaktadır.", HttpStatusCode.BadRequest);
+        //}
+
+        #endregion
+
+        #region 3.YONTEM ASENKRON VALİDASYON AMA BU BİZE ÇOK UYMAYAN İLLA BURADA ASYNC YAZMAK İSTEDİĞİN ÖRNEĞİ
+        var validationResult = await createProductRequestValidator.ValidateAsync(request); // kendimiz manuel validet ediyoruz
+        if (!validationResult.IsValid)
+        {
+            return ServiceResult<CreateProductResponse>.Fail(validationResult.Errors.Select(h => h.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
+        }
+            
+        #endregion
+
         var product = new Product()
         {
             Name = request.Name,
