@@ -2,7 +2,6 @@
 using App_Services.Products.Dto;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace App_Services.Products;
 public class CreateProductRequestValidator : AbstractValidator<CreateProductRequest>

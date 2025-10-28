@@ -3,10 +3,7 @@ using App_Repositories.Product;
 using App_Services.Products.Dto;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
-using System.Linq;
 using System.Net;
-using System.Runtime.Intrinsics.X86;
 
 namespace App_Services.Products;
 public class ProductService(IProductRepository productRepository,IUnitOfWork unitOfWork, IValidator<CreateProductRequest> createProductRequestValidator) : IProductService
