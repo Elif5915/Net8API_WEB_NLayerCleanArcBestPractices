@@ -1,5 +1,7 @@
 ﻿using App_Services.Products;
-using App_Services.Products.Dto;
+using App_Services.Products.Dto.Create;
+using App_Services.Products.Dto.Update;
+using App_Services.Products.Dto.UpdateStock;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App_API.Controllers;

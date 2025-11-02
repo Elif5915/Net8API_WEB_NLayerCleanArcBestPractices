@@ -1,4 +1,5 @@
-﻿using App_Services.Products;
+﻿using App_Services.ExceptionHandlers;
+using App_Services.Products;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,10 @@ public static class ServiceExtensions
         //GetExecutingAssembly ile bu app_services katamanı içinde dahili olarak burada çalış/kapsa demiş oluyoruz.
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+        //exceptionları verirken sıralama önemliymiş!çünkü dönüşlerde true ya da false dönüldüğü için
+
+        services.AddExceptionHandler<CriticalExceptionHandler>(); //bunda false dönüyoruz yani hatayla bir şey yapmıyorum sadece yakalıp onunla ilgili işlemimi yapıyorum örneğin sms gönderiyorum sonra yolculuğuna devam ettriyorum;  bir sonraki exception middleware aktar.
+        services.AddExceptionHandler<GlobalExceptionHandler>(); // bunda da true dönüyoruz kendi modelimizi oluşturup onu gönderip olayı bitiyoruz.
         return services;
     }
 }

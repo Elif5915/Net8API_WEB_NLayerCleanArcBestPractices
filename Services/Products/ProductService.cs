@@ -1,6 +1,10 @@
 ﻿using App_Repositories;
 using App_Repositories.Product;
+using App_Services.ExceptionHandlers;
 using App_Services.Products.Dto;
+using App_Services.Products.Dto.Create;
+using App_Services.Products.Dto.Update;
+using App_Services.Products.Dto.UpdateStock;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -101,6 +105,9 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
 
     public async Task<ServiceResult<CreateProductResponse>> CreateAsync(CreateProductRequest request)
     {
+
+        throw new CriticalException("kritik bir seviye bir hata meydana geldi");
+
         #region 2.YONTEM ASENKRON Busniess logicte VALİDASYON
 
         ////2.YONTEM 
@@ -147,6 +154,13 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
         if(product is null)
         {
             return ServiceResult.Fail("Product not found", HttpStatusCode.NotFound);
+        }
+
+        var isProductNameExist = await productRepository.Where(x => x.Name == request.Name && x.Id != product.Id).AnyAsync(); // async şekilde db gidip var mı diye baktık kontrol ettik, var olan thread leri bloklamadık.
+        // AnyAsync();  bu şkilde db gidip cevap almamız 10 dk sürebilir, biz await ile async kod yazdığımzı için threadimi bloklanmıyor. başka işler yapabiliyor.
+        if (isProductNameExist)
+        {
+            return ServiceResult.Fail("Ürün ismi veritabanında/sistemde bulunmaktadır.", HttpStatusCode.BadRequest);
         }
 
         product.Name = request.Name;

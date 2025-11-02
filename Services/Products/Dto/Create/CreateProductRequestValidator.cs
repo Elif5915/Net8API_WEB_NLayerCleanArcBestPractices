@@ -1,9 +1,8 @@
 ﻿using App_Repositories.Product;
-using App_Services.Products.Dto;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace App_Services.Products;
+namespace App_Services.Products.Dto.Create;
 public class CreateProductRequestValidator : AbstractValidator<CreateProductRequest>
 {
     private readonly IProductRepository _productRepository;
@@ -35,7 +34,7 @@ public class CreateProductRequestValidator : AbstractValidator<CreateProductRequ
     #endregion
 
     #region 3.YONTEM ASENKRON VALİDASYON AMA BU BİZE ÇOK UYMAYAN İLLA BURADA ASYNC YAZMAK İSTEDİĞİN ÖRNEĞİ
-    private async Task<bool> MustUniqueProductNameAsync(string name, CancellationToken cancellationToken )
+    private async Task<bool> MustUniqueProductNameAsync(string name, CancellationToken cancellationToken)
     {
         return !await _productRepository.Where(x => x.Name == name).AnyAsync(cancellationToken);
     }

@@ -21,6 +21,9 @@ builder.Services.AddRepositories(builder.Configuration).AddServices(builder.Conf
 
 var app = builder.Build();
 
+//eðer exception için middleware tanýmladýysanýz UseExceptionHandler yere gider return false demiþ olduðun için CriticalExceptionHandler da.
+app.UseExceptionHandler(x => { }); //bunu eklemeyi unutma çünkü critical da global handlerýmýzda buna baðlý!
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -1,4 +1,7 @@
 ﻿using App_Services.Products.Dto;
+using App_Services.Products.Dto.Create;
+using App_Services.Products.Dto.Update;
+using App_Services.Products.Dto.UpdateStock;
 
 namespace App_Services.Products;
 public interface IProductService
