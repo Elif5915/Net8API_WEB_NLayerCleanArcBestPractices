@@ -15,6 +15,10 @@ public static class ServiceExtensions
         services.AddFluentValidationAutoValidation(); //fluent validation paketini yükledik ve bu kod ile fluent val. tanı dedik.
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly()); //ekstra validasyon classlarını otomatik tanıyabilmesi için 
+
+        //GetExecutingAssembly ile bu app_services katamanı içinde dahili olarak burada çalış/kapsa demiş oluyoruz.
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
         return services;
     }
 }

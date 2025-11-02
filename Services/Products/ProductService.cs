@@ -1,12 +1,13 @@
 ﻿using App_Repositories;
 using App_Repositories.Product;
 using App_Services.Products.Dto;
+using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace App_Services.Products;
-public class ProductService(IProductRepository productRepository,IUnitOfWork unitOfWork, IValidator<CreateProductRequest> createProductRequestValidator) : IProductService
+public class ProductService(IProductRepository productRepository,IUnitOfWork unitOfWork, IValidator<CreateProductRequest> createProductRequestValidator, IMapper mapper) : IProductService
 {
     public async Task<ServiceResult<List<ProductDto>>> GetTopPriceProductsAsync(int count)
     {
@@ -45,8 +46,10 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
     public async Task<ServiceResult<List<ProductDto>>> GetAllListAsync()
     {
         var products = await productRepository.GetAll().ToListAsync();
-        var productDto = products.Select(p => new ProductDto( p.Id,p.Name,p.Price, p.Stock
-        )).ToList();
+        // manuel mapleme ;  var productDto = products.Select(p => new ProductDto( p.Id,p.Name,p.Price, p.Stock)).ToList();
+
+        //automapper ile mappleme 
+        var productDto = mapper.Map<List<ProductDto>>(products);
 
         return ServiceResult<List<ProductDto>>.Success(productDto);
     }
@@ -62,11 +65,14 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
         // 3- 10 => 21 - 30 kayıt  skip(20).Take(10) biz bunu yapmamız gerek.
 
         var products = await productRepository.GetAll().Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-        var productDto = products.Select(p => new ProductDto
-        (
-            p.Id,p.Name,p.Price,p.Stock
+        // manuel map; var productDto = products.Select(p => new ProductDto
+        //(
+        //    p.Id,p.Name,p.Price,p.Stock
 
-        )).ToList();
+        //)).ToList();
+
+          //automapper ile mappleme 
+        var productDto = mapper.Map<List<ProductDto>>(products);
 
         return ServiceResult<List<ProductDto>>.Success(productDto);
 
@@ -81,14 +87,15 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
             //{
             //    ErrorMessage = new List<string>() { "Product not found" }
             //};
-            ServiceResult<ProductDto>.Fail(errorMessage: "Product not found", HttpStatusCode.NotFound);
+           return ServiceResult<ProductDto?>.Fail(errorMessage: "Product not found", HttpStatusCode.NotFound);
         }
         //return new ServiceResult<Product>()
         //{
         //    Data = product
         //};
 
-        var productsAsDto = new ProductDto(product!.Id,product.Name,product.Price,product.Stock);
+       // var productsAsDto = new ProductDto(product!.Id,product.Name,product.Price,product.Stock);
+       var productsAsDto = mapper.Map<ProductDto>(product);
         return ServiceResult<ProductDto>.Success(productsAsDto)!;
     }
 

@@ -21,7 +21,7 @@ public class CustomBaseController : ControllerBase
             return Created(result.UrlAsCreated, result);
         }
 
-        return new ObjectResult(result) { StatusCode = result.StatusCode.GetHashCode()};
+        return new ObjectResult(result) { StatusCode = (int)result.StatusCode };
 
 
         //return result.StatusCode switch { System.Net.HttpStatusCode.NoContent => NoContent(),
@@ -39,7 +39,7 @@ public class CustomBaseController : ControllerBase
             return new ObjectResult(null) { StatusCode = result.StatusCode.GetHashCode() };
         }
 
-        return new ObjectResult(result) { StatusCode = result.StatusCode.GetHashCode() };
+        return new ObjectResult(result) { StatusCode = (int)result.StatusCode };
         //switch yapıısnda yazmak istersek aşağıdaki yapı gibi olur;
         //return result.StatusCode switch {
         //    System.Net.HttpStatusCode.NoContent => new ObjectResult(null) { StatusCode = result.StatusCode.GetHashCode()},
