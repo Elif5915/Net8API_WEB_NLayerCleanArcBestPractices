@@ -126,15 +126,17 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
         {
             return ServiceResult<CreateProductResponse>.Fail(validationResult.Errors.Select(h => h.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
         }
-            
+
         #endregion
 
-        var product = new Product()
-        {
-            Name = request.Name,
-            Stock = request.Stock,
-            Price = request.Price
-        };
+        //var product = new Product()
+        //{
+        //    Name = request.Name,
+        //    Stock = request.Stock,
+        //    Price = request.Price
+        //};
+        var product = mapper.Map<Product>(request);
+
         await productRepository.AddAsync(product);
         await unitOfWork.SaveChangesAsync();
 
@@ -163,9 +165,11 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
             return ServiceResult.Fail("Ürün ismi veritabanında/sistemde bulunmaktadır.", HttpStatusCode.BadRequest);
         }
 
-        product.Name = request.Name;
-        product.Price = request.Price;
-        product.Stock = request.Stock;
+        //product.Name = request.Name;
+        //product.Price = request.Price;
+        //product.Stock = request.Stock;
+
+        product = mapper.Map(request, product);
 
         productRepository.Update(product);
         await unitOfWork.SaveChangesAsync();
