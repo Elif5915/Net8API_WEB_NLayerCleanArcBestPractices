@@ -1,4 +1,5 @@
-﻿using App_Repositories.Generic;
+﻿using App_Repositories.Categories;
+using App_Repositories.Generic;
 using App_Repositories.Product;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,7 @@ public static class RepositoryExtensions
         //dispose = elden çıkarmak
         //bu yüzden AddScoped<IProductRepository, ProductRepository> bunlar AddSingleton olmaz ya da AddTransient olmaz AMA EF CORE İÇİN GEÇERLİ!
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using App_Repositories.Categories;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace App_Repositories.Product;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<Product> Products { get; set; } = default!;
+    public DbSet<Category> Categories { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

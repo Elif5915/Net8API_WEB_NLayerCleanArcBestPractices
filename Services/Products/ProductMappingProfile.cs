@@ -4,12 +4,12 @@ using App_Services.Products.Dto.Create;
 using App_Services.Products.Dto.Update;
 using AutoMapper;
 
-namespace App_Services.Mapping;
-public class MappingProfile : Profile
+namespace App_Services.Products;
+public class ProductMappingProfile : Profile
 {
-    public MappingProfile() 
+    public ProductMappingProfile()
     {
-        CreateMap<Product, ProductDto>().ReverseMap(); 
+        CreateMap<Product, ProductDto>().ReverseMap();
 
         //! aşağıdakişlerde nedne reverse yapmadık çüğnkü  dto dan entity dönüştürme var sadece. requestten entity(poruct) mapleme yapıyopruz
 
