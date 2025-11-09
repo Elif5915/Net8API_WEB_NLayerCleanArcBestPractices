@@ -4,5 +4,5 @@ namespace App_Repositories.Categories;
 public interface ICategoryRepository : IGenericRepository<Category>
 {
     Task<Category?> GetCategoryWithProductAsync(int id);
-    IQueryable<Category?> GetCategoryByProductsAsync();
+    IQueryable<Category?> GetCategoryByProducts();
 }

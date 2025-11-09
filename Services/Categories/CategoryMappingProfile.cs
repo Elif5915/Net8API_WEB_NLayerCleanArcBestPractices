@@ -16,5 +16,7 @@ public class CategoryMappingProfile : Profile
        
         CreateMap<UpdateCategoryRequest, Category>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.ToLowerInvariant()));
+
+        CreateMap<Category, CategoryWithProductsDto>().ReverseMap();
     }
 }

@@ -9,7 +9,7 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
     {
     }
 
-    public IQueryable<Category?> GetCategoryByProductsAsync()
+    public IQueryable<Category?> GetCategoryByProducts()
     { 
         return Context.Categories.Include(x => x.Products).AsQueryable(); //AsQueryable yaptık ki ilerde order by ile sıralama yapmak istersek yapabilelim diye.
     }

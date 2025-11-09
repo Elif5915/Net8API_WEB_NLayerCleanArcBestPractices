@@ -1,5 +1,6 @@
 ﻿using App_Repositories;
 using App_Repositories.Categories;
+using App_Services.Categories.Dto;
 using App_Services.Categories.Dto.Create;
 using App_Services.Categories.Dto.Update;
 using AutoMapper;
@@ -65,4 +66,47 @@ public  class CategoryService(ICategoryRepository categoryRepository, IUnitOfWor
 
         return ServiceResult.Success(HttpStatusCode.NoContent);
     }
+
+    public async Task<ServiceResult<List<CategoryDto>>> GetAllList()
+    {
+        var categories = await categoryRepository.GetAll().ToListAsync();
+        var categoriesAsDto = mapper.Map<List<CategoryDto>>(categories);
+        return ServiceResult<List<CategoryDto>>.Success(categoriesAsDto);
+    }
+
+    public async Task<ServiceResult<CategoryDto>> GetByIdAsync(int id)
+    {
+        var category = await categoryRepository.GetByIdAsync(id);
+        if(category is null)
+        {
+            return ServiceResult<CategoryDto>.Fail("Kategori Bulunamadı.", HttpStatusCode.NotFound);
+        }
+
+        var categoryAsDto = mapper.Map<CategoryDto>(category);
+        return ServiceResult<CategoryDto>.Success(categoryAsDto);
+
+    }
+
+    public async Task<ServiceResult<CategoryWithProductsDto>> GetCategoryWithProductAsync(int categoryId)
+    {
+        var category = await categoryRepository.GetCategoryWithProductAsync(categoryId);
+        if(category is null)
+        {
+            return ServiceResult<CategoryWithProductsDto>.Fail("Kategori Bulunamadı.", HttpStatusCode.NotFound);
+        }
+
+        var categoryAsDto = mapper.Map<CategoryWithProductsDto>(category);
+
+        return ServiceResult<CategoryWithProductsDto>.Success(categoryAsDto);
+
+    }
+
+    public async Task<ServiceResult<List<CategoryWithProductsDto>>> GetCategoryByProducts()
+    {
+        var category = await categoryRepository.GetCategoryByProducts().ToListAsync();
+
+        var categoryAsDto = mapper.Map<List<CategoryWithProductsDto>>(category);
+        return ServiceResult<List<CategoryWithProductsDto>>.Success(categoryAsDto);
+    }
+
 }
