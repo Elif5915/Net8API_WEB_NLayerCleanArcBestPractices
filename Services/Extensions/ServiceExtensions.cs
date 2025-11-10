@@ -1,4 +1,5 @@
-﻿using App_Services.ExceptionHandlers;
+﻿using App_Services.Categories;
+using App_Services.ExceptionHandlers;
 using App_Services.Products;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -12,6 +13,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoryService, CategoryService>();
 
         services.AddFluentValidationAutoValidation(); //fluent validation paketini yükledik ve bu kod ile fluent val. tanı dedik.
 
