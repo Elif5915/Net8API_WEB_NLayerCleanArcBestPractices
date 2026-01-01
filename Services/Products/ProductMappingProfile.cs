@@ -11,7 +11,7 @@ public class ProductMappingProfile : Profile
     {
         CreateMap<Product, ProductDto>().ReverseMap();
 
-        //! aşağıdakişlerde nedne reverse yapmadık çüğnkü  dto dan entity dönüştürme var sadece. requestten entity(poruct) mapleme yapıyopruz
+        //! aşağıdakilerde nedne reverse yapmadık çünkü  dto dan entity dönüştürme var sadece. requestten entity(product) mapleme yapıyopruz
 
         //dest : destination(hedef) product karşılık geliyor. src ise gelen CreateProductRequest dir.
         CreateMap<CreateProductRequest, Product>().ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.ToLowerInvariant())); // gelen name küçük harflerle db kayıt etsin ve culture lardan etkilenmesin diye tolowerınvariant kullan.

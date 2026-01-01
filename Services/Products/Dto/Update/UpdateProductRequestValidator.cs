@@ -10,10 +10,14 @@ public  class UpdateProductRequestValidator : AbstractValidator<UpdateProductReq
            .Length(3, 15).WithMessage("Ürün ismi 3 ile 15 karakter arasında olmalıdır.");
 
         RuleFor(x => x.Price)
-            .GreaterThan(0).WithMessage("Ürün fiyatı sıfırdan büyük olmalıdır");
+            .GreaterThan(0).WithMessage(
+            "Ürün fiyatı sıfırdan büyük olmalıdır");
 
         RuleFor(x => x.Stock)
             .InclusiveBetween(1, 100).WithMessage("Stok adedi 1 ile 100 arasında olmalıdır.");
+
+        RuleFor(x => x.categoryId)
+            .GreaterThan(0).WithMessage("Ürün kategori değeri 0'dan büyük olmalıdır.");
     }
 
 }

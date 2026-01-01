@@ -19,15 +19,12 @@ public  class CategoryService(ICategoryRepository categoryRepository, IUnitOfWor
             return ServiceResult<int>.Fail("Bu kategori ismi sistemde bulunmaktadır.", System.Net.HttpStatusCode.NotFound);
         }
 
-        var newCategory = new Category
-        {
-            Name = request.Name,
-        };
+        var newCategory = mapper.Map<Category>(request);
 
         await categoryRepository.AddAsync(newCategory);
         await unitOfWork.SaveChangesAsync();
 
-        return ServiceResult<int>.Success(newCategory.Id);
+        return ServiceResult<int>.SuccessAsCreated(newCategory.Id,$"api/categories/{newCategory.Id}");
 
     }
 
