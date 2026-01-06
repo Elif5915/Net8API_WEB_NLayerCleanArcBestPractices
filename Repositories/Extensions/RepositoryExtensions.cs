@@ -1,5 +1,6 @@
 ﻿using App_Repositories.Categories;
 using App_Repositories.Generic;
+using App_Repositories.Interceptors;
 using App_Repositories.Product;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,9 @@ public static class RepositoryExtensions
             {
                 sqlServerOptionsAction.MigrationsAssembly(typeof(RepositoryAssembly).Assembly.FullName); //mig dosyalarım repository katmanımda olmalı olsun diye bu ayar yazıldı
             });
+
+            options.AddInterceptors(new AuditDbContextInterceptor());
+
         });
 
         services.AddScoped<IProductRepository, ProductRepository>();//IProductRepository gördüğün zaman ProductRepository nesne örneği üret

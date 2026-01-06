@@ -14,4 +14,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         base.OnModelCreating(modelBuilder);
     }
 
+    //(auditlog da updated-created kolonlarını tutabilmek amaç)
+    //birinci yol : savechanges ezmek
+    //public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    //{
+    //    //bu iyi bir yöntem değil,
+    //    return base.SaveChangesAsync(cancellationToken);
+    //}
+
 }
