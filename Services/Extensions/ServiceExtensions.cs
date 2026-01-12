@@ -3,6 +3,7 @@ using App_Services.ExceptionHandlers;
 using App_Services.Products;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -12,6 +13,8 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true); //bu .net in default olarak üretmiş olduğu hata mesajlarını kapattık.
+
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
 

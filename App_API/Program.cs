@@ -14,7 +14,6 @@ options.Filters.Add<FluentValidationFilter>(); //yazdýðýmýz filterýmýzý global i
 
 });
 
-builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true); //bu .net in default olarak üretmiþ olduðu hata mesajlarýný kapattýk.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRepositories(builder.Configuration).AddServices(builder.Configuration);
