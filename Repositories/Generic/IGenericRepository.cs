@@ -1,7 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Security.Cryptography;
 
 namespace App_Repositories.Generic;
-public interface IGenericRepository<T> where T : class
+public interface IGenericRepository<T, TId> where T : class where TId : struct
 {
     IQueryable<T> GetAll();
     IQueryable<T> Where(Expression<Func<T, bool>> predicate);
@@ -9,4 +11,5 @@ public interface IGenericRepository<T> where T : class
     ValueTask AddAsync(T entity);
     void Update(T entity);
     void Delete(T entity);
+     Task<bool> AnyAsync(TId id);
 }

@@ -1,10 +1,8 @@
 ﻿using App_Repositories.Categories;
 
 namespace App_Repositories.Product;
-public class Product : IAuditEntity
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = default!;
+public class Product : BaseEntity<int>, IAuditEntity
+{    public string Name { get; set; } = default!;
     public decimal Price { get; set; }
     public int Stock { get; set; }
     public int CategoryId { get; set; }
