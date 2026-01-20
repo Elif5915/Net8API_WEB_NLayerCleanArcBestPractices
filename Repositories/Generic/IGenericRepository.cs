@@ -11,5 +11,5 @@ public interface IGenericRepository<T, TId> where T : class where TId : struct
     ValueTask AddAsync(T entity);
     void Update(T entity);
     void Delete(T entity);
-     Task<bool> AnyAsync(TId id);
+    Task<bool> AnyAsync(TId id);
 }

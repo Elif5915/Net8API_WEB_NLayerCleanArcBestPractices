@@ -3,7 +3,7 @@ using App_Repositories.Product;
 using Microsoft.EntityFrameworkCore;
 
 namespace App_Repositories.Categories;
-public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
+public class CategoryRepository : GenericRepository<Category,int>, ICategoryRepository
 {
     public CategoryRepository(AppDbContext appDbContext) : base(appDbContext)
     {

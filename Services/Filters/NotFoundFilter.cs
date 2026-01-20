@@ -1,14 +1,10 @@
 ﻿using App_Repositories.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace App_Services.Filters;
-internal class NotFoundFilter<T> : Attribute, IAsyncActionFilter where T : class
+internal class NotFoundFilter<T,TId>(IGenericRepository<T,TId> genericRepository) : Attribute, IAsyncActionFilter where T : class where TId : struct
 {
-    public NotFoundFilter(IGenericRepository<T> genericRepository)
-    {
-
-    }
-
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         //buraya yazılan kodlar action metod çalışmadan önce
@@ -18,7 +14,31 @@ internal class NotFoundFilter<T> : Attribute, IAsyncActionFilter where T : class
             await next();//ilgili bir sonraki isteği yap yani endpointi çalıştır
             return; //yolculuğa devam et
         }
-            
+
+        //if (!int.TryParse(idValue.ToString(), out var id)) {
+        //    await next();
+        //    return;
+        //}
+
+        if(idValue is not TId id)
+        {
+            await next();
+            return;
+        }
+
+        var hasEntity = await genericRepository.AnyAsync(id);
+
+        if (!hasEntity)
+        {
+            var entityName = typeof(T).Name; // hangi enetity geldiği aldık, product mı yoksa category mi?
+
+            //action method name 
+            var actionName = context.ActionDescriptor.DisplayName;
+            var result = ServiceResult.Fail()
+
+            context.Result = new NotFoundObjectResult(new { Message = "Entity not found" });
+            return;
+        }
 
 
         await next();
