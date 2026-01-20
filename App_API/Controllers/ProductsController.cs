@@ -1,4 +1,7 @@
-﻿using App_Services.Products;
+﻿
+using App_Repositories.Product;
+using App_Services.Filters;
+using App_Services.Products;
 using App_Services.Products.Dto.Create;
 using App_Services.Products.Dto.Update;
 using App_Services.Products.Dto.UpdateStock;
@@ -62,6 +65,7 @@ public class ProductsController(IProductService productService) : CustomBaseCont
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, UpdateProductRequest request) => CreateActionResult(await productService.UpdateAsync(id, request));
 
+    [ServiceFilter(typeof(NotFoundFilter<Product,int>))]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id) => CreateActionResult(await productService.DeleteAsync(id));
 

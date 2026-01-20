@@ -36,7 +36,7 @@ public static class RepositoryExtensions
         //request geldiğinde bir nesne örneği oluşur response döndüğü zaman da dbcontextlerde dispose olur.
         //dispose = elden çıkarmak
         //bu yüzden AddScoped<IProductRepository, ProductRepository> bunlar AddSingleton olmaz ya da AddTransient olmaz AMA EF CORE İÇİN GEÇERLİ!
-        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

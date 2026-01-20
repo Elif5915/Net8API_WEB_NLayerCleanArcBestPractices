@@ -159,7 +159,7 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
         }
 
         var isProductNameExist = await productRepository.Where(x => x.Name == request.Name && x.Id != product.Id).AnyAsync(); // async şekilde db gidip var mı diye baktık kontrol ettik, var olan thread leri bloklamadık.
-        // AnyAsync();  bu şkilde db gidip cevap almamız 10 dk sürebilir, biz await ile async kod yazdığımzı için threadimi bloklanmıyor. başka işler yapabiliyor.
+        // AnyAsync();  bu şekilde db gidip cevap almamız 10 dk sürebilir, biz await ile async kod yazdığımzı için threadimi bloklanmıyor. başka işler yapabiliyor.
         if (isProductNameExist)
         {
             return ServiceResult.Fail("Ürün ismi veritabanında/sistemde bulunmaktadır.", HttpStatusCode.BadRequest);
@@ -197,10 +197,10 @@ public class ProductService(IProductRepository productRepository,IUnitOfWork uni
     {
         var product = await productRepository.GetByIdAsync(id);
 
-        if (product is null)
-        {
-            return ServiceResult.Fail("Product not found", HttpStatusCode.NotFound);
-        }
+        //if (product is null)
+        //{
+        //    return ServiceResult.Fail("Product not found", HttpStatusCode.NotFound);
+        //}
 
         productRepository.Delete(product);
         await unitOfWork.SaveChangesAsync();

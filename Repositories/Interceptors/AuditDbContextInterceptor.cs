@@ -20,7 +20,12 @@ public class AuditDbContextInterceptor : SaveChangesInterceptor
                 continue; //burada gelen entity IAuditEntity implement almamışssa onu bırak devam et sıradaki entity geç 
             }
 
-            _behaviors[entityEntry.State](eventdata.Context, auditEntity);
+            //if (entityEntry.State == EntityState.Added || entityEntry.State == EntityState.Modified)
+            //{
+            //    _behaviors[entityEntry.State](eventdata.Context, auditEntity);
+            //} bunu fast fail yap
+            if (entityEntry.State is not (EntityState.Added or EntityState.Modified)) continue;
+
 
             //switch (entityEntry.State)
             //{

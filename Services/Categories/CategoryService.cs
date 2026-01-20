@@ -53,10 +53,10 @@ public  class CategoryService(ICategoryRepository categoryRepository, IUnitOfWor
     public async Task<ServiceResult> Delete(int id)
     {
         var category = await categoryRepository.GetByIdAsync(id);
-        if(category is null)
-        {
-            return ServiceResult.Fail("Kategori Bulunamadı.", HttpStatusCode.NotFound);
-        }
+        //if(category is null)
+        //{
+        //    return ServiceResult.Fail("Kategori Bulunamadı.", HttpStatusCode.NotFound);
+        //}
 
         categoryRepository.Delete(category);
         await unitOfWork.SaveChangesAsync();

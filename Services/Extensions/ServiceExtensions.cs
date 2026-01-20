@@ -1,5 +1,6 @@
 ﻿using App_Services.Categories;
 using App_Services.ExceptionHandlers;
+using App_Services.Filters;
 using App_Services.Products;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -17,6 +18,9 @@ public static class ServiceExtensions
 
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
+
+        //her request geldiğinde NotFoundFilter filterımız çalışsın
+        services.AddScoped(typeof(NotFoundFilter<,>)); //NotFoundFilter iki tane generate aldığı için virgül koyduk!
 
         services.AddFluentValidationAutoValidation(); //fluent validation paketini yükledik ve bu kod ile fluent val. tanı dedik.
 
